@@ -36,3 +36,19 @@ instance Convertible (NonEmpty a) [a] where
 instance Convertible [a] (NonEmpty a) where
   type Error [a] (NonEmpty a) = ()
   from = NE.nonEmpty
+
+instance Convertible Integer Int where
+  type Error Integer Int = Void
+  from = fromInteger
+
+instance Convertible Int Integer where
+  type Error Int Integer = Void
+  from = fromIntegral
+
+instance Convertible (Either e a) (Maybe a) where
+  type Error (Either e a) (Maybe a) = Void
+  from = either (const Nothing) Just
+
+instance Convertible Int Double where
+  type Error Int Double = Void
+  from = fromIntegral
