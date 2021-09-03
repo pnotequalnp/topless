@@ -3,23 +3,37 @@ Put the top down and enjoy the sun with convertible types
 
 ## Concept
 Mimics Rust's `From` and `Into` traits, but unifying them with the `TryFrom` and `TryInto` traits.
-For example with the provided instances, `from @[Int] @(NonEmpty Int) :: [Int] -> Maybe (NonEmpt
+For example with the provided instances, `from @[Int] @(NonEmpty Int) :: [Int] -> Maybe (NonEmpty
 Int)`, but `from @(NonEmpty Int) @[Int] :: NonEmpty Int -> [Int]`.
 
 ## Usage
 
 ```haskell
+{-# LANGUAGE OverloadedLists #-}
+
 import Data.List.NonEmpty (NonEmpty)
 import Topless (from, into)
 
 xs :: [Int]
 xs = [1..5]
 
-xs' :: Maybe (NE.NonEmpty Int)
+xs' :: Maybe (NonEmpty Int)
 xs' = into @(NonEmpty Int) xs
+-- xs' = Just [1, 2, 3, 4, 5]
 
-xs'' :: [Int]
-xs'' = into @[Int] xs'
+ys :: NonEmpty Int
+ys = [1..5]
+
+ys' :: [Int]
+ys' = into @[Int] ys
+-- ys' = [1, 2, 3, 4, 5]
+
+zs :: [Int]
+zs = []
+
+zs' :: Maybe (NonEmpty Int)
+zs' = into @(NonEmpty Into) zs
+-- zs' = Nothing
 ```
 
 ## Writing Instances
