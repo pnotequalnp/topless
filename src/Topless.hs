@@ -20,6 +20,7 @@ type family ReduceError e a where
 
 class Convertible a b where
   type Error a b :: Type
+  type Error a b = Void
   from :: a -> ReduceError (Error a b) b
 
 into :: forall b a. Convertible a b => a -> ReduceError (Error a b) b
@@ -30,7 +31,6 @@ instance Convertible a a where
   from = id
 
 instance Convertible (NonEmpty a) [a] where
-  type Error (NonEmpty a) [a] = Void
   from = NE.toList
 
 instance Convertible [a] (NonEmpty a) where
@@ -38,17 +38,13 @@ instance Convertible [a] (NonEmpty a) where
   from = NE.nonEmpty
 
 instance Convertible Integer Int where
-  type Error Integer Int = Void
   from = fromInteger
 
 instance Convertible Int Integer where
-  type Error Int Integer = Void
   from = fromIntegral
 
 instance Convertible (Either e a) (Maybe a) where
-  type Error (Either e a) (Maybe a) = Void
   from = either (const Nothing) Just
 
 instance Convertible Int Double where
-  type Error Int Double = Void
   from = fromIntegral
